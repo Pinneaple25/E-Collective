@@ -4,6 +4,7 @@
     "paths": {
       "@controllers/*": [ "./controllers/*" ],
       "@models/*": ["./models/*" ],
+      "@mongo/*": [ "./mongo/*" ],
       "@routers/*": [ "./routers/*" ],
       "@services/*": ["./services/*"],
     }

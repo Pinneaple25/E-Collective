@@ -19,6 +19,7 @@
   "_moduleAliases": {
     "@controllers": "src/controllers",
     "@models": "src/models",
+    "@mongo": "src/mongo",
     "@routers": "src/routers",
     "@services": "src/services"
   }

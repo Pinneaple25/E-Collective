@@ -1,8 +1,20 @@
-const { getAllActivities } = require('@models/activitiy.model');
+const { selectAllActivities, insertActivity, validateActivity } = require('@models/activitiy.model');
 
-const httpGetAllActivities = (_, res) => 
-  res.status(200).json(getAllActivities());
+const getAllActivities = (_, res) => 
+  res.status(200).json(selectAllActivities());
+
+const postNewActivity = async(req, res) => {
+  const activity = req.body;
+
+  const error = await validateActivity(activity);
+  if (error)
+    return res.status(400).json({ error });
+  
+  await insertActivity(activity);
+  return res.status(201).json(activity);
+} 
 
 module.exports = {
-  httpGetAllActivities,
+  getAllActivities,
+  postNewActivity,
 }
