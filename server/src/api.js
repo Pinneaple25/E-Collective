@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { activityRouter } = require('./routers')
+const activityRouter = require('@routers/activity.router')
 
 const api = Router();
 

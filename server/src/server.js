@@ -1,6 +1,7 @@
+require('module-alias/register');
 const http = require('http');
 require('dotenv').config();
-const { mongoConnect } = require('./services');
+const { mongoConnect } = require('@services/mongo');
 
 const app = require('./app');
 
