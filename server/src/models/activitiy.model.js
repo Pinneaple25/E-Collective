@@ -1,26 +1,23 @@
 const activitiesDatabase = require('@mongo/activity.mongo');
 
-const activities = [
-  {
-    Id: 1,
-    Name: "Decorations",
-  }, {
-    Id: 2,
-    Name: "Technology",
-  }, {
-    Id: 3,
-    Name: "Food and snacks",
-  }
-]
-
-const selectAllActivities = () => activities;
+const selectAllActivities = async(skip, limit) => 
+  await activitiesDatabase
+    .find({}, {'_id': 0, '__v': 0})
+    .sort({ activityNumber: 1 })
+    .skip(skip)
+    .limit(limit);
 
 const selectLatestActivityNumber = async() => {
   const latestActivity = await activitiesDatabase
     .findOne()
     .sort('-activityNumber');
 
-    return latestActivity?.activityNumber | 1
+  return latestActivity?.activityNumber | 1
+}
+
+const findActivity = async(activityId) => {
+  const filter = { activityNumber: activityId };
+  return await activitiesDatabase.findOne(filter, {'_id': 0, '__v': 0});
 }
 
 const activityExists = async(name) => await activitiesDatabase.exists({ name });
@@ -56,6 +53,7 @@ const validateActivity = async(activity) => {
 
 module.exports = {
   selectAllActivities,
+  findActivity,
   insertActivity,
   validateActivity,
 }
