@@ -8,7 +8,11 @@ const activitySchema = new Schema({
   name: {
     type: String,
     require: true,
-    
+  },
+  status: {
+    type: Boolean,
+    required: true,
+    default: true,
   },
 });
 

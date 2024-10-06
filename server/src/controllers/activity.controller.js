@@ -2,7 +2,10 @@ const {
   selectAllActivities,
   findActivity,
   insertActivity,
-  validateActivity
+  updateActivity,
+  deactivateActivity,
+  validateActivity,
+  anyActivity,
 } = require('@models/activitiy.model');
 const { getPagination } = require('@services/query');
 
@@ -13,8 +16,8 @@ const getAllActivities = async(req, res) => {
 }
 
 const getActivity = async(req, res) => {
-  const activityId = Number(req.params.id);
-  const activity = await findActivity(activityId);
+  const activityNumber = Number(req.params.id);
+  const activity = await findActivity(activityNumber);
 
   if (!activity)
     return res.status(404).json({ error: 'Activity was not found.'});
@@ -33,8 +36,41 @@ const postNewActivity = async(req, res) => {
   return res.status(201).json(activity);
 }
 
+const putActivity = async(req, res) => {
+  const activityNumber = Number(req.params.id);
+  const activity = req.body;
+
+  if (!await anyActivity(activityNumber))
+    return res.status(404).json({ error: 'Activity was not found.' });
+
+  const error = await validateActivity(activity, activityNumber);
+  if (error)
+    return res.status(400).json({ error });
+
+  await updateActivity(activityNumber, activity);
+  return res.status(200).json(activity);
+}
+
+const deleteActivity = async(req, res) => {
+  const activityNumber = Number(req.params.id);
+
+  const activity = await findActivity(activityNumber);
+  if (!activity)
+    return res.status(404).json({ error: 'Activity was not found.' });
+
+  const deactivate = await deactivateActivity(activityNumber);
+  if (!deactivate)
+    return res.status(400).json({
+      error: 'Activity was not deleted',
+    });
+  
+  return res.status(200).json({ Ok: true });
+}
+
 module.exports = {
   getAllActivities,
   getActivity,
   postNewActivity,
+  putActivity,
+  deleteActivity,
 }
